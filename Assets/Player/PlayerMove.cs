@@ -15,7 +15,6 @@ public class PlayerMove : MonoBehaviour
     private Transform _playerTransform;
     private PlayerStatus playerStatus = PlayerStatus.isRoad;
     private bool isGround;
-    private bool isJump;
 
     enum PlayerStatus
     {
@@ -45,7 +44,6 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGround && playerStatus == PlayerStatus.isRoad)
         {
             playerStatus = PlayerStatus.isAir;
-            isJump = true;
         }
     }
 
