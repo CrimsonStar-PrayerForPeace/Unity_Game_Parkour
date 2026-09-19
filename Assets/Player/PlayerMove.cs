@@ -7,7 +7,8 @@ public class PlayerMove : MonoBehaviour
     [Header("交互移动速度")]public float Speed = 13;
     [Header("恒定移动速度")]public float ConstantSpeed = 10;
     [Header("跳跃速度")]public float JumpSpeed = 5;
-    [Header("跳跃最大高度")]public float JumpHight = 10;
+    [Header("跳跃后降落速度")]public float JumpDrop = 3;
+    [Header("跳跃高度")]public float JumpHight = 10;
     [Header("射线检测层")]public LayerMask layerMask;
     [Header("射线检测长度")]public int Distance = 2;
 
@@ -43,7 +44,7 @@ public class PlayerMove : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && isGround && playerStatus == PlayerStatus.isRoad)
         {
-            _playerRigidbody.velocity = new Vector3(Input.GetAxis("Horizontal") *Speed, JumpSpeed, _playerRigidbody.velocity.z);
+            playerStatus = PlayerStatus.isAir;
         }
     }
 
@@ -60,9 +61,12 @@ public class PlayerMove : MonoBehaviour
             _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, _playerRigidbody.velocity.y, ConstantSpeed);
             break;
             case PlayerStatus.isAir:
-                if (isGround || _playerTransform.transform.position.y > JumpHight)
+                _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, JumpSpeed, _playerRigidbody.velocity.z);
+                if ( _playerTransform.transform.position.y >= JumpHight)
                 {
-                    _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, _playerRigidbody.velocity.y, ConstantSpeed);
+                    _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, JumpSpeed/2, _playerRigidbody.velocity.z);
+                    _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, -JumpDrop, _playerRigidbody.velocity.z);
+                    playerStatus = PlayerStatus.isRoad;
                 }
             break;
         }

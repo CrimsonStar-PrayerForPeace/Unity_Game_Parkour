@@ -44,7 +44,7 @@ public class SingletonForManager<T> : MonoBehaviour where T : SingletonForManage
 
     protected virtual void OnDestroy()
     {
-        if(_instance != null)
+        if(_instance != this)
         {
             _instance = null;
         }

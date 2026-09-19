@@ -156,8 +156,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 13.6
   ConstantSpeed: 10
-  JumpSpeed: 6
-  JumpHight: 7
+  JumpSpeed: 6.4
+  JumpDrop: 2
+  JumpHight: 5
   layerMask:
     serializedVersion: 2
     m_Bits: 8
