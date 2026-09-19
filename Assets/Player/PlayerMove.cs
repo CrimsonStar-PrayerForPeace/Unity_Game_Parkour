@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,6 @@ public class PlayerMove : MonoBehaviour
     [Header("交互移动速度")]public float Speed = 13;
     [Header("恒定移动速度")]public float ConstantSpeed = 10;
     [Header("跳跃速度")]public float JumpSpeed = 5;
-    [Header("跳跃后降落速度")]public float JumpDrop = 3;
-    [Header("跳跃高度")]public float JumpHight = 10;
     [Header("射线检测层")]public LayerMask layerMask;
     [Header("射线检测长度")]public int Distance = 2;
 
@@ -16,6 +15,7 @@ public class PlayerMove : MonoBehaviour
     private Transform _playerTransform;
     private PlayerStatus playerStatus = PlayerStatus.isRoad;
     private bool isGround;
+    private bool isJump;
 
     enum PlayerStatus
     {
@@ -45,6 +45,7 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGround && playerStatus == PlayerStatus.isRoad)
         {
             playerStatus = PlayerStatus.isAir;
+            isJump = true;
         }
     }
 
@@ -62,16 +63,14 @@ public class PlayerMove : MonoBehaviour
             break;
             case PlayerStatus.isAir:
                 _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, JumpSpeed, _playerRigidbody.velocity.z);
-                if ( _playerTransform.transform.position.y >= JumpHight)
+                if (!isGround)
                 {
-                    _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, JumpSpeed/2, _playerRigidbody.velocity.z);
-                    _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, -JumpDrop, _playerRigidbody.velocity.z);
+                    _playerRigidbody.velocity = new Vector3(playerMoveX *Speed, _playerRigidbody.velocity.y, _playerRigidbody.velocity.z);
                     playerStatus = PlayerStatus.isRoad;
                 }
             break;
         }
     }
-
     private bool GroundInspection()
     {
         if (Physics.Raycast(_playerTransform.position,Vector3.down,out RaycastHit hit,Distance,layerMask))
